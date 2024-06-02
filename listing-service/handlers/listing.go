@@ -1,8 +1,8 @@
 package handlers
 
 import (
+	"99-backend-exercise/listing-service/services"
 	"99-backend-exercise/models"
-	"99-backend-exercise/services"
 	"fmt"
 	"net/http"
 	"strconv"

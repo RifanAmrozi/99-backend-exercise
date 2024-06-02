@@ -2,18 +2,25 @@ package handlers
 
 import (
 	"99-backend-exercise/models"
-	"99-backend-exercise/services"
+	"99-backend-exercise/user-service/services"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
 
 func CreateUser(c *gin.Context) {
-	var user models.User
-	if err := c.ShouldBindJSON(&user); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	name := c.PostForm("name")
+	if name == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Name is required"})
 		return
+	}
+
+	user := models.User{
+		Name:      name,
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
 	}
 
 	if err := services.CreateUser(&user); err != nil {
@@ -23,9 +30,10 @@ func CreateUser(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"result": true,
-		"users":  []models.User{user},
+		"user":   user,
 	})
 }
+
 func GetUserByID(c *gin.Context) {
 	idParam := c.Param("id")
 	id, err := strconv.Atoi(idParam)
