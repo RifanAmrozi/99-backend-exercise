@@ -14,6 +14,7 @@ func main() {
 
 	router.POST("/users", handlers.CreateUser)
 	router.GET("/users/:id", handlers.GetUserByID)
+	router.POST("/listings", handlers.CreateListing)
 
 	router.Run(":8080")
 }
