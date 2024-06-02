@@ -8,3 +8,6 @@ import (
 func CreateListing(listing *models.Listing) error {
 	return repositories.CreateListing(listing)
 }
+func GetListings(pageNum, pageSize int, userID *int) ([]models.Listing, error) {
+	return repositories.GetListings(pageNum, pageSize, userID)
+}

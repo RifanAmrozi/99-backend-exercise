@@ -49,3 +49,38 @@ func CreateListing(c *gin.Context) {
 		"listing": listing,
 	})
 }
+
+func GetListings(c *gin.Context) {
+	pageNumStr := c.DefaultQuery("page_num", "1")
+	pageSizeStr := c.DefaultQuery("page_size", "10")
+	userIDStr := c.Query("user_id")
+
+	pageNum, err := strconv.Atoi(pageNumStr)
+	if err != nil || pageNum <= 0 {
+		pageNum = 1
+	}
+
+	pageSize, err := strconv.Atoi(pageSizeStr)
+	if err != nil || pageSize <= 0 {
+		pageSize = 10
+	}
+
+	var userID *int
+	if userIDStr != "" {
+		id, err := strconv.Atoi(userIDStr)
+		if err == nil {
+			userID = &id
+		}
+	}
+
+	listings, err := services.GetListings(pageNum, pageSize, userID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"result": false, "error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"result":   true,
+		"listings": listings,
+	})
+}
